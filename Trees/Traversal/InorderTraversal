@@ -1,0 +1,21 @@
+
+  public static void inOrder(TreeNode root) { // T(n)=O(n)  &   S(n)=O(1)
+        if(root==null) {
+            return;
+        }
+        TreeNode node=root;
+        Stack<TreeNode> st=new Stack<>();
+        while(true) {
+            if(node!=null) {
+                st.push(node);
+                node=node.left;
+            } else {
+                if(st.empty()) {
+                    break;
+                }
+                node=st.pop();
+                System.out.print(node.data+" ");
+                node=node.right;
+            }
+        }
+    }
