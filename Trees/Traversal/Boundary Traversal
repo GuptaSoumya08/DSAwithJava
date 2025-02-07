@@ -1,0 +1,63 @@
+
+                                // Boundary Traversal //
+    
+    public static List<Integer> traverseBoundary(TreeNode root){
+        List<Integer> list=new ArrayList<>();
+        list.add(root.data);
+        if(root.left==null && root.right==null) {
+            return list;
+        }
+        if(root.left!=null) {
+            leftBoundary(root.left, list);
+        }
+        leaf(root, list);
+        if(root.right!=null) {
+            rightBoundaryRev(root.right, list);
+        }
+        return list;
+    }
+    public static void leftBoundary(TreeNode root, List<Integer> list){
+        TreeNode node=root;
+        while(node.left!=null || node.right!=null) {
+            list.add(node.data);
+            if(node.left!=null) {
+                node=node.left;
+            } else {
+                node=node.right;
+            }
+        }
+    }
+    public static void rightBoundaryRev(TreeNode root, List<Integer> list){
+        TreeNode node=root;
+        Stack<Integer> st=new Stack<>();
+        while(node.left!=null || node.right!=null) {
+            st.push(node.data);
+            if(node.right!=null) {
+                node=node.right;
+            } else {
+                node=node.left;
+            }
+        }
+        while(!st.empty()) {
+            list.add(st.pop());
+        }
+    }
+    public static void leaf(TreeNode root, List<Integer> list){
+        TreeNode node=root;
+        Stack<TreeNode> st=new Stack<>();
+        while(true) {
+            if(node!=null) {
+                st.push(node);
+                node=node.left;
+            } else {
+                if(st.empty()) {
+                    break;
+                }
+                node=st.pop();
+                if(node.left==null && node.right==null) {
+                    list.add(node.data);
+                }
+                node=node.right;
+            }
+        }
+    }
