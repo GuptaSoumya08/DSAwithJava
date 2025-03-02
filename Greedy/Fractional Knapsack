@@ -1,0 +1,44 @@
+
+// GFG: fractional Knapsack
+    public static double fractionalKnapsack(List<Integer> val, List<Integer> wt, int capacity) {
+        int n=val.size();
+        Item[] items=new Item[n];
+        for(int i=0; i<n; i++) {
+            items[i]=new Item(val.get(i), wt.get(i));
+        }
+        Arrays.sort(items, new ItemComparator());
+        int currWt=0;
+        double tVal=0;
+        for(int i=0; i<n; i++) {
+            if(currWt+items[i].weight<=capacity) {
+                currWt+=items[i].weight;
+                tVal+=items[i].value;
+            } else {
+                int remCap=capacity-currWt;
+                tVal+=((double)items[i].value*remCap)/items[i].weight;
+                break;
+            }
+        }
+        return tVal;
+    }
+class ItemComparator implements Comparator<Item> {
+    @Override
+    public int compare(Item a, Item b) {
+        double ratio1=(double)a.value/a.weight;
+        double ratio2=(double)b.value/b.weight;
+        if(ratio1<ratio2) {
+            return 1;
+        } else if(ratio1>ratio2) {
+            return -1;
+        } else {
+            return 0;
+        }
+    }
+}
+class Item {
+    int value, weight;
+    Item(int x, int y) {
+        this.value = x;
+        this.weight = y;
+    }
+}
