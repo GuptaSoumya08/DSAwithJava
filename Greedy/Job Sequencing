@@ -1,0 +1,39 @@
+
+                        // GFG: Job Sequencing Problem //
+
+    public static ArrayList<Integer> jobSequencing(int[] id, int[] deadline, int[] profit) {
+        int n=id.length;
+        Job[] j=new Job[n];
+        for(int i=0; i<n; i++) {
+            j[i]=new Job(id[i], deadline[i], profit[i]);
+        }
+        Arrays.sort(j, (a, b) -> b.profit-a.profit);
+        int[] schedule=new int[n];
+        int cnt=0, pro=0;
+        for(int i=0; i<n; i++) {
+            int k=j[i].deadline;
+            while(k>0) {
+                if(schedule[k-1]==0) {
+                    cnt++;
+                    pro+=j[i].profit;
+                    schedule[k-1]=j[i].id;
+                    break;
+                }
+                k--;
+            }
+        }
+        ArrayList<Integer> ans=new ArrayList<>();
+        ans.add(cnt);
+        ans.add(pro);
+        return ans;
+    }
+class Job {
+    int id;
+    int deadline;
+    int profit;
+    Job(int id, int deadline, int profit) {
+        this.id=id;
+        this.deadline=deadline;
+        this.profit=profit;
+    }
+}
