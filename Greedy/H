@@ -1,0 +1,54 @@
+public static boolean isMaxHeap(int[] arr, int idx, int n) {
+        int left = 2 * idx + 1;
+        int right=left+1;
+        if (left>=n) {
+            return true;
+        }
+
+        if(arr[left]>arr[idx]) {
+            return false;
+        }
+        if(right<n && arr[right]>arr[idx]) {
+            return false;
+        }
+        return isMaxHeap(arr, left, n) && (right >= n || isMaxHeap(arr, right, n));
+    }
+
+    // GFG:
+    public static void heapify(int[] arr) {
+        int n=arr.length;
+        for(int i=n/2-1; i>=0; i--) {
+            shiftDown(i, arr, n);
+        }
+    }
+    public static void shiftDown(int idx, int[] heap, int size) {
+        if(idx>=size/2) {
+            return;
+        }
+        int leftIdx = 2 * idx + 1, rightIdx = leftIdx+1;
+        int maxOfTwo=leftIdx;
+        if(rightIdx<size && heap[rightIdx]>heap[leftIdx]) {
+            maxOfTwo=rightIdx;
+        }
+        if (heap[idx] < heap[maxOfTwo]) {
+            int temp=heap[idx];
+            heap[idx]=heap[maxOfTwo];
+            heap[maxOfTwo]=temp;
+            shiftDown(maxOfTwo, heap, size);
+        }
+    }
+
+    // HeapSort
+    public static void heapSort(int[] arr) {
+        heapify(arr);
+        int n=arr.length;
+        for(int i=n-1; i>0; i--) {
+            arr[i]=extractMax(arr, i+1);
+        }
+    }
+    public static int extractMax(int[] arr, int n) {
+        int max = arr[0];
+        arr[0] = arr[n-1];
+        shiftDown(0, arr, n-1);
+        return max;
+    }
