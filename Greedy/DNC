@@ -1,0 +1,121 @@
+public class DivideNConquer {
+    public static void swap(int[] arr, int i, int j) {
+        int temp=arr[i];
+        arr[i]=arr[j];
+        arr[j]=temp;
+    }
+    public static void quickSort(int[] arr, int low, int high) {
+        if(low>=high) {
+            return;
+        }
+        int partition=partitionAtMid(arr, low, high);
+        quickSort(arr, low, partition-1);
+        quickSort(arr, partition+1, high);
+    }
+    public static int partitionAtMid(int[] arr, int low, int high) {
+        int mid=(low+high)/2;
+        int pivot=arr[mid];
+        int i=low, j=high;
+        while(i<j) {
+            while(arr[i]<pivot) { // No need of {i<high} since beech me collide zrur krenge
+                i++;
+            }
+            while(arr[j]>pivot) {
+                j--;
+            }
+            if(i<j) { // will end when i==j, and wohi partition pos hoga
+                swap(arr, i, j);
+            }
+        }
+        return i;
+    }
+    public static int partitionAtFirst(int[] arr, int low, int high) {
+        int pivot=arr[low];
+        int i=low, j=high;
+        while(i<j) {
+            while(i<high && arr[i]<=pivot) {
+                i++;
+            }
+            while(j>low && arr[j]>pivot) {
+                j--;
+            }
+            if(i<j) {
+                swap(arr, i, j);
+            }
+        }
+        swap(arr, low, j);
+        return j;
+    }
+    public static void shellSort(int[] arr) {
+        int n=arr.length;
+        for(int gap=n/2; gap>0; gap/=2) {
+            for(int j=gap; j<n; j++) {
+                int temp=arr[j];
+                int i;
+                for(i=j-gap; i>=0 && arr[i]>temp; i-=gap) {
+                    arr[i+gap]=arr[i];
+                }
+                arr[i+gap]=temp;
+//                for(int i=j-gap; i>=0; i-=gap) {
+//                    if(arr[i+gap]>=arr[i]) break;
+//                    else swap(arr, i, i+gap);
+//                }
+            }
+        }
+    }
+
+    public static Pair<Integer, Integer> maxNMin(int[] arr, int low, int high) {
+        if(low==high) {
+            return new Pair(arr[low], arr[low]);
+        }
+
+        int mid=low+(high-low)/2;
+        Pair<Integer, Integer> left=maxNMin(arr, low, mid);
+        Pair<Integer, Integer> right=maxNMin(arr, mid+1, high);
+
+        int max=Math.max(left.getKey(), right.getKey());
+        int min=Math.min(left.getValue(), right.getValue());
+        return new Pair<>(max, min);
+    }
+
+    // Leetcode 169: Majority Element
+    public static int majorityElement(int[] nums) {
+        return majorityElement(nums, 0, nums.length-1);
+    }
+    public static int majorityElement(int[] nums, int low, int high) {
+        if(low==high) {
+            return nums[low];
+        }
+        int mid=low+(high-low)/2;
+        int leftMajority=majorityElement(nums, low, mid);
+        int rightMajority=majorityElement(nums, mid+1, high);
+
+        if(leftMajority==rightMajority) {
+            return leftMajority;
+        }
+        int leftCount=countOccurences(nums, leftMajority, low, high);
+        int rightCount=countOccurences(nums, rightMajority, low, high);
+
+        int majorityThreshold = (high-low + 1) / 2;
+        if (leftCount > majorityThreshold) return leftMajority;
+        if (rightCount > majorityThreshold) return rightMajority;
+
+        return -1;
+    }
+    public static int countOccurences(int[] nums, int num, int low, int high) {
+        int cnt=0;
+        for(int i=low; i<=high; i++) {
+            if(num==nums[i]) {
+                cnt++;
+            }
+        }
+        return cnt;
+    }
+    public static void main(String[] args) {
+        int[] arr={2,2,1,1,1,2,2};
+        System.out.println(majorityElement(arr));
+//        shellSort(arr);
+//        int[] a=maxNMin(arr, 0, arr.length-1);
+//        System.out.println(Arrays.toString(a));
+    }
+}
