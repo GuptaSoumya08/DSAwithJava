@@ -1,0 +1,20 @@
+// Leetcode 110: Balanced Binary Tree
+                // T=O(n)   S=(h) WC=N & BC=logn
+    public static boolean isBalanced(TreeNode root) {
+        return checkBalancingFactor(root)!=-1;
+    }
+    public static int checkBalancingFactor(TreeNode root) { // T=O(n) & S=O(1)+O(H) {H= n[worst] log2n[best]}
+        if(root==null) {
+            return 0;
+        }
+        int left=checkBalancingFactor(root.left);
+        int right=checkBalancingFactor(root.right);
+        if(left==-1 || right==-1) {
+            return -1;
+        }
+        if(left-right>1 || left-right< -1) {
+            return -1;
+        } else {
+            return Math.max(left, right)+1;
+        }
+    }
