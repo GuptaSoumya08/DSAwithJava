@@ -1,23 +1,23 @@
 
                                 // Boundary Traversal //
     
-    public static List<Integer> traverseBoundary(TreeNode root){
-        List<Integer> list=new ArrayList<>();
-        list.add(root.data);
+    // GFG: Tree Boundary Traversal
+    public static ArrayList<Integer> boundaryTraversal(TreeNode root) {
+        ArrayList<Integer> ans=new ArrayList<>();
         if(root.left==null && root.right==null) {
-            return list;
+            return ans;
         }
-        if(root.left!=null) {
-            leftBoundary(root.left, list);
-        }
-        leaf(root, list);
-        if(root.right!=null) {
-            rightBoundaryRev(root.right, list);
-        }
-        return list;
+        ans.add(root.data);
+        leftB(root, ans);
+        leaf(root, ans);
+        rightB(root, ans);
+        return ans;
     }
-    public static void leftBoundary(TreeNode root, List<Integer> list){
-        TreeNode node=root;
+    public static void leftB(TreeNode root, List<Integer> list) {
+        TreeNode node=root.left;
+        if(node==null) {
+            return;
+        }
         while(node.left!=null || node.right!=null) {
             list.add(node.data);
             if(node.left!=null) {
@@ -27,37 +27,35 @@
             }
         }
     }
-    public static void rightBoundaryRev(TreeNode root, List<Integer> list){
-        TreeNode node=root;
-        Stack<Integer> st=new Stack<>();
+    public static void rightB(TreeNode root, List<Integer> list) {
+        TreeNode node=root.right;
+        if(node==null) {
+            return;
+        }
+        int i=0;
         while(node.left!=null || node.right!=null) {
-            st.push(node.data);
+            list.add(list.size()-i, node.data);
+            i++;
             if(node.right!=null) {
                 node=node.right;
             } else {
                 node=node.left;
             }
         }
-        while(!st.empty()) {
-            list.add(st.pop());
-        }
     }
-    public static void leaf(TreeNode root, List<Integer> list){
-        TreeNode node=root;
-        Stack<TreeNode> st=new Stack<>();
-        while(true) {
-            if(node!=null) {
-                st.push(node);
-                node=node.left;
-            } else {
-                if(st.empty()) {
-                    break;
-                }
-                node=st.pop();
-                if(node.left==null && node.right==null) {
-                    list.add(node.data);
-                }
-                node=node.right;
+    public static void leaf(TreeNode root, List<Integer> list) {
+        Stack<TreeNode> st = new Stack<>();
+        st.push(root);
+        while (!st.isEmpty()) {
+            TreeNode node = st.pop();
+            if (node.right != null) {
+                st.push(node.right);
+            }
+            if (node.left != null) {
+                st.push(node.left);
+            }
+            if (node.left == null && node.right == null) {
+                list.add(node.data);
             }
         }
     }
